@@ -1,0 +1,16 @@
+{
+  "name": "delivery",
+  "version": "1.0.0",
+  "description": "delivery notification app for lily's",
+  "main": "index.js",
+  "dependencies": {
+    "gulp-inject": "^4.2.0",
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

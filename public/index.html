@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Delivery</title>
+    <style media="screen">
+        body {
+            font-family: Roboto, Arial, sans-serif;
+            background: #ECEFF1;
+            color: rgba(0,0,0,0.87);
+        }
+
+        div[ng-controller] {
+            height: 100%;
+            padding-bottom: 15px;
+        }
+
+        md-content {
+            padding: 24px;
+        }
+
+        .map { height: 400px; }
+
+
+    </style>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+    <!--<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
+    <script src="http://maps.google.cn/maps/api/js?key=AIzaSyCB-bZyNYdVVERXOPnYz_9X9ZCOo2WbgUE"></script>
+    <!-- endinject -->
+    <!-- inject:css -->
+    <!-- built css files will go here... -->
+    <!-- endinject -->
+</head>
+<body ng-app="delivery">
+
+<div layout="column" ng-controller="mainCtrl">
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <h2 class="md-flex">Delivery App</h2>
+        </div>
+    </md-toolbar>
+
+    <div class="map">
+        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+    </div>
+
+    <!--<md-content flex layout-padding>-->
+        <!--<md-card>-->
+            <!--<md-card-header>-->
+                <!--<md-card-header-text>-->
+                    <!--<span class="md-title">Coupon Broadcaster</span>-->
+                <!--</md-card-header-text>-->
+            <!--</md-card-header>-->
+            <!--<div class="map">-->
+                <!--<ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>-->
+            <!--</div>-->
+
+            <!--<md-card-actions layout="row" layout-align="start center">-->
+                <!--<md-button>Action 1</md-button>-->
+                <!--<md-button>Action 2</md-button>-->
+            <!--</md-card-actions>-->
+            <!--<md-card-content>-->
+                <!--<p>-->
+                    <!--The titles of Washed Out's breakthrough song and the first single from Paracosm share the-->
+                    <!--two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...-->
+                <!--</p>-->
+            <!--</md-card-content>-->
+        <!--</md-card>-->
+    <!--</md-content>-->
+
+</div>
+
+
+<!-- bower:js -->
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-animate/angular-animate.js"></script>
+<script src="../bower_components/angular-aria/angular-aria.js"></script>
+<script src="../bower_components/angular-messages/angular-messages.js"></script>
+<script src="../bower_components/firebase/firebase.js"></script>
+<script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+<script src="../bower_components/lodash/lodash.js"></script>
+<script src="../bower_components/markerclustererplus/src/markerclusterer.js"></script>
+<script src="../bower_components/google-maps-utility-library-v3-markerwithlabel/dist/markerwithlabel.js"></script>
+<script src="../bower_components/google-maps-utility-library-v3-infobox/dist/infobox.js"></script>
+<script src="../bower_components/google-maps-utility-library-v3-keydragzoom/dist/keydragzoom.js"></script>
+<script src="../bower_components/js-rich-marker/src/richmarker.js"></script>
+<script src="../bower_components/angular-material/angular-material.js"></script>
+<script src="../bower_components/angularfire/dist/angularfire.js"></script>
+<script src="../bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script src="../public/js/app.js"></script>
+<!-- endinject -->
+
+</body>
+</html>
