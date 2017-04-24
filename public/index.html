@@ -21,18 +21,18 @@
             padding: 24px;
         }
 
-        .map { height: 400px; }
+        .map { height: 300px; }
 
 
     </style>
     <!-- bower:css -->
     <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
-    <!--<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
-    <script src="http://maps.google.cn/maps/api/js?key=AIzaSyCB-bZyNYdVVERXOPnYz_9X9ZCOo2WbgUE"></script>
     <!-- endinject -->
     <!-- inject:css -->
     <!-- built css files will go here... -->
     <!-- endinject -->
+    <!--<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
+    <!--<script src="http://maps.google.cn/maps/api/js?key=AIzaSyCB-bZyNYdVVERXOPnYz_9X9ZCOo2WbgUE"></script>-->
 </head>
 <body ng-app="delivery">
 
@@ -43,33 +43,32 @@
         </div>
     </md-toolbar>
 
-    <div class="map">
-        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
-    </div>
 
-    <!--<md-content flex layout-padding>-->
-        <!--<md-card>-->
-            <!--<md-card-header>-->
-                <!--<md-card-header-text>-->
-                    <!--<span class="md-title">Coupon Broadcaster</span>-->
-                <!--</md-card-header-text>-->
-            <!--</md-card-header>-->
-            <!--<div class="map">-->
-                <!--<ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>-->
-            <!--</div>-->
+    <md-content flex layout-padding>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Coupon Broadcaster</span>
+                </md-card-header-text>
+            </md-card-header>
+            <div class="map">
+                <div map-lazy-load="https://maps.google.com/maps/api/js"
+                     map-lazy-load-params="{{googleMapsUrl}}">
+                    <ng-map zoom="14"></ng-map>
+                </div>
+            </div>
 
-            <!--<md-card-actions layout="row" layout-align="start center">-->
-                <!--<md-button>Action 1</md-button>-->
-                <!--<md-button>Action 2</md-button>-->
-            <!--</md-card-actions>-->
-            <!--<md-card-content>-->
-                <!--<p>-->
-                    <!--The titles of Washed Out's breakthrough song and the first single from Paracosm share the-->
-                    <!--two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...-->
-                <!--</p>-->
-            <!--</md-card-content>-->
-        <!--</md-card>-->
-    <!--</md-content>-->
+            <md-card-actions layout="row" layout-align="start center">
+                <md-button>Action 1</md-button>
+                <md-button>Action 2</md-button>
+            </md-card-actions>
+            <md-card-content>
+                <p>
+                    {{address.formatted_address}}
+                </p>
+            </md-card-content>
+        </md-card>
+    </md-content>
 
 </div>
 
@@ -80,19 +79,12 @@
 <script src="../bower_components/angular-aria/angular-aria.js"></script>
 <script src="../bower_components/angular-messages/angular-messages.js"></script>
 <script src="../bower_components/firebase/firebase.js"></script>
-<script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
-<script src="../bower_components/lodash/lodash.js"></script>
-<script src="../bower_components/markerclustererplus/src/markerclusterer.js"></script>
-<script src="../bower_components/google-maps-utility-library-v3-markerwithlabel/dist/markerwithlabel.js"></script>
-<script src="../bower_components/google-maps-utility-library-v3-infobox/dist/infobox.js"></script>
-<script src="../bower_components/google-maps-utility-library-v3-keydragzoom/dist/keydragzoom.js"></script>
-<script src="../bower_components/js-rich-marker/src/richmarker.js"></script>
+<script src="../bower_components/ngmap/build/scripts/ng-map.js"></script>
 <script src="../bower_components/angular-material/angular-material.js"></script>
 <script src="../bower_components/angularfire/dist/angularfire.js"></script>
-<script src="../bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
 <!-- endinject -->
 <!-- inject:js -->
-<script src="../public/js/app.js"></script>
+<script src="/public/js/app.js"></script>
 <!-- endinject -->
 
 </body>

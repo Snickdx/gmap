@@ -19,7 +19,7 @@
     "angular-material": "^1.1.4",
     "angularfire": "^2.3.0",
     "firebase": "^3.8.0",
-    "angular-google-maps": "^2.4.1"
+    "ngmap": "^1.18.4"
   },
   "devDependencies": {
     "angular": "^1.6.4",
