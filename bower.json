@@ -21,7 +21,8 @@
     "firebase": "^3.8.0",
     "ngmap": "^1.18.4",
     "ngstorage": "^0.3.11",
-    "ionic-toast": "^0.4.1"
+    "ionic-toast": "^0.4.1",
+    "angular-sanitize": "^1.6.4"
   },
   "devDependencies": {
     "angular": "^1.6.4",

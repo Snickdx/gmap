@@ -1,4 +1,4 @@
-let app = angular.module('delivery', ['ngMaterial', 'firebase', 'ngMap', 'ngStorage', 'ionic-toast']);
+let app = angular.module('delivery', ['ngMaterial', 'firebase', 'ngMap', 'ngStorage', 'ionic-toast', 'ngSanitize']);
 
 app.run(function(FB) {
 	FB.registerSW();
@@ -195,7 +195,7 @@ app.factory('FB', ['$http', '$firebaseAuth', '$firebaseArray', '$firebaseObject'
 	return obj;
 }]);
 
-app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', 'ionicToast', function($scope, FB, NgMap, $http, $localStorage, ionicToast){
+app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', 'ionicToast', '$sce', function($scope, FB, NgMap, $http, $localStorage, ionicToast, $sce){
 	$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB-bZyNYdVVERXOPnYz_9X9ZCOo2WbgUE";
 	
 	let marker = null;
@@ -210,8 +210,10 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 		if($scope.test){
 			FB.enableMessaging(token=>{
 				console.log(token);
+				ionicToast.show('Notifications Enabled', 'bottom', false, 4000);
 			}, error=>{
 				console.log(error);
+				ionicToast.show('Cannot enable notifications at the moment', 'bottom', false, 4000);
 			});
 		}else{
 			FB.deleteToken();
@@ -226,11 +228,11 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 	
 	$scope.sendLocation = () => {
 		ionicToast.show('Location Sent!', 'bottom', false, 4000);
-		// FB.push('/couponList', {
-		// 	code: $scope.generateCode(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
-		// 	lat : $scope.dropOff.lat,
-		// 	lng : $scope.dropOff.lng,
-		// });
+		FB.push('/couponList', {
+			code: $scope.generateCode(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+			lat : $scope.dropOff.lat,
+			lng : $scope.dropOff.lng,
+		});
 	};
 	
 	$scope.getAddress = pos => {
