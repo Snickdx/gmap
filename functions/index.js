@@ -30,14 +30,14 @@ function sendNotification(receiver, payload, priority){
 exports.boardcastCoupon = functions.database.ref('/couponList/{pushId}')
 	.onWrite(event => {
 		let coupon = event.data.val();
-		
+		let time = moment().utcOffset("-04:00").add(1, 'h');
 		let androidPayload = {
 			"data":{
 				"title": "Special Offer!",
 				"code" : coupon.code,
 				"lat" : coupon.lat,
 				"lng" : coupon.lng,
-				"exp" : moment().add(1, 'h').format('x').toString()
+				"exp" : time.format('x').toString()
 			}
 		};
 		
@@ -47,7 +47,7 @@ exports.boardcastCoupon = functions.database.ref('/couponList/{pushId}')
 			"notification" : {
 				"title" : "Special Offer!",
 				"click_action" : "https://lilys-aaf3d.firebaseapp.com",
-				"body" : `Use Offer code ${coupon.code} to and place an order within the next hour to get free delivery!`,
+				"body" : `Order by ${time.format('h:mm:ss a')} and get free delivery to your location using the code ${coupon.code}`,
 				"icon" : "https://firebasestorage.googleapis.com/v0/b/lilys-aaf3d.appspot.com/o/images%2FLily.png?alt=media&token=3528a95a-328e-4ca0-bf01-8502df8df985"
 			}
 		};
