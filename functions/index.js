@@ -2,49 +2,53 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const moment = require('moment');
+
 admin.initializeApp(functions.config().firebase);
 
 
-exports.sendFollowerNotification = functions.database.ref('/couponList/{pushId}').onWrite(event => {
-	const pietime = event.params.pietime;
-	console.log(event.params.pietime);
-	let payload = {
-		"notification": {
-			"title": "Notipy Notification",
-			"body": "Pieman in SAC!",
-			"click_action" : "https://pieman.online",
-			"icon": "https://firebasestorage.googleapis.com/v0/b/pieman-d47da.appspot.com/o/pieman-144.png?alt=media&token=fae111b6-3ddf-4552-a17d-9e911090977b"
-		}
-	};
-	
-	let options = {
-		"priority": "high"
-	};
-	
-	let topic = "general";
-	
-	admin.messaging().sendToTopic(topic, payload, options)
+function sendTopicNotification(topic, payload, priority){
+	admin.messaging().sendToTopic(topic, payload, {"priority": priority})
 		.then(function(response) {
 			console.log("Successfully sent message:", response);
 		})
 		.catch(function(error) {
 			console.log("Error sending message:", error);
 		});
-	
-});
+}
 
-exports.thumbnailProfile = functions.database.ref('/couponList/{pushId}')
+function sendNotification(receiver, payload, priority){
+	admin.messaging().sendToDevice(receiver, payload, {"priority": priority})
+		.then(function(response) {
+			console.log("Successfully sent message:", response);
+		})
+		.catch(function(error) {
+			console.log("Error sending message:", error);
+		});
+}
+
+exports.boardcastCoupon = functions.database.ref('/couponList/{pushId}')
 	.onWrite(event => {
-		var eventSnapshot = event.data;
-		console.log(eventSnapshot);
+		let coupon = event.data.val();
+		
+		let androidPayload = {
+			"data":{
+				"code" : String(coupon.code),
+				"lat" : String(coupon.lat),
+				"lng" : String(coupon.lng),
+				"exp" : String(moment().add(1, 'h').format('x'))
+			}
+		};
+		
+		let webPayload = {
+			"notification" : {
+				"title" : "Special Offer!",
+				"click_action" : "https://lilys-aaf3d.firebaseapp.com",
+				"body" : `Use Offer code ${coupon.code} to and place an order within the next hour to get free delivery!`,
+				"icon" : "https://firebasestorage.googleapis.com/v0/b/lilys-aaf3d.appspot.com/o/images%2FLily.png?alt=media&token=3528a95a-328e-4ca0-bf01-8502df8df985"
+			}
+		};
+		
+		sendTopicNotification('coupon', androidPayload, 'normal');
+		if(coupon.sender != null)sendNotification(coupon.sender, webPayload, 'high');
 	});
-
-exports.addMessage = functions.https.onRequest((req, res) => {
-	// Grab the text parameter.
-	const original = req.query.text;
-	// Push it into the Realtime Database then send a response
-	admin.database().ref('/messages').push({original: original}).then(snapshot => {
-		// Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
-		res.redirect(303, snapshot.ref);
-	});
-});

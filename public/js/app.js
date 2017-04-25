@@ -59,46 +59,45 @@ app.factory('FB', ['$http', '$firebaseAuth', '$firebaseArray', '$firebaseObject'
 	//***********************************Cloud Messaging***************************************
 	
 	obj.deleteToken = () => {
-		obj.set('/subscriptions/'+$localStorage.tokenKey, null);
+		obj.set('/subscriptions/web/'+$localStorage.savedToken, null);
 		console.log('Notifications Disabled!');
 		delete $localStorage.savedToken;
-		delete $localStorage.tokenKey;
 	};
 	
 	obj.saveToken = token => {
 		$localStorage.savedToken = token;
-		let ref = obj.pushKey('/registrations/coupon');
-		$localStorage.tokenKey = ref.key;
-		ref.set(token);
+		obj.set(`subscriptions/web/${token}`, true);
 		
-		$http({
-				method: 'POST',
-				url: `https://iid.googleapis.com/iid/v1/${token}/rel/topics/coupon`,
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization':'key=AAAAQU4jmdM:APA91bHZ517PwFoB6XZa_Zl4u2Fwjvc6J_bz10ZqLiP9IBKPB5_8XjaDJe_XrJfoj1OJgY1Igs3Yy5156ODFTwDSwRGhmNFNCVpxjS9HIqgGYecUia-RyCcHhiCq05wUQu5wlkkRlm3j'
-				}
-			},
-			response => {
-				console.log('Registered for coupon notifications', response);
-			},
-			err => {
-				console.log(err);
-			}).then(resp=>{
-			console.log("Registered for coupon notifications", resp);
-		});
+		// $http({
+		// 		method: 'POST',
+		// 		url: `https://iid.googleapis.com/iid/v1/${token}/rel/topics/web`,
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			'Authorization':'key=AAAAQU4jmdM:APA91bHZ517PwFoB6XZa_Zl4u2Fwjvc6J_bz10ZqLiP9IBKPB5_8XjaDJe_XrJfoj1OJgY1Igs3Yy5156ODFTwDSwRGhmNFNCVpxjS9HIqgGYecUia-RyCcHhiCq05wUQu5wlkkRlm3j'
+		// 		}
+		// 	},
+		// 	response => {
+		// 		console.log('Registered for coupon notifications', response);
+		// 	},
+		// 	err => {
+		// 		console.log(err);
+		// 	}).then(resp=>{
+		// 	console.log("Registered for coupon notifications", resp);
+		// });
 		
-		console.log("Messaging token saved at "+ref.key);
+		console.log("Messaging token saved");
 	};
 	
 	obj.isMsgEnabled = () => {
 		return  $localStorage.savedToken != undefined;
 	};
 	
-	msg.onMessage(payload =>{
-		console.log("Message Received: ", payload);
-		ionicToast.show(payload.notification.title+" : "+payload.notification.body, 'bottom', false, 4000);
-	});
+	obj.handleMessage = (handler) => {
+		msg.onMessage(payload =>{
+			console.log("Message Received: ", payload);
+			handler(payload);
+		});
+	};
 	
 	msg.onTokenRefresh(() => {
 		msg.getToken()
@@ -195,7 +194,7 @@ app.factory('FB', ['$http', '$firebaseAuth', '$firebaseArray', '$firebaseObject'
 	return obj;
 }]);
 
-app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', 'ionicToast', '$sce', function($scope, FB, NgMap, $http, $localStorage, ionicToast, $sce){
+app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', 'ionicToast', function($scope, FB, NgMap, $http, $localStorage, ionicToast){
 	$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB-bZyNYdVVERXOPnYz_9X9ZCOo2WbgUE";
 	
 	let marker = null;
@@ -220,6 +219,11 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 		}
 	};
 	
+	FB.handleMessage(payload => {
+		console.log(payload.notification.title, payload.notification.body);
+		alert(payload.notification.title+" : "+payload.notification.body);
+	});
+	
 	$scope.generateCode = (length, chars) => {
 		let result = '';
 		for (let i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -227,11 +231,12 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 	};
 	
 	$scope.sendLocation = () => {
-		ionicToast.show('Location Sent!', 'bottom', false, 4000);
+		// ionicToast.show('Location Sent!', 'bottom', false, 1000);
 		FB.push('/couponList', {
 			code: $scope.generateCode(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
 			lat : $scope.dropOff.lat,
 			lng : $scope.dropOff.lng,
+			sender: $scope.test ? $localStorage.savedToken : null
 		});
 	};
 	
