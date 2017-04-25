@@ -233,9 +233,9 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 	$scope.sendLocation = () => {
 		// ionicToast.show('Location Sent!', 'bottom', false, 1000);
 		FB.push('/couponList', {
-			code: $scope.generateCode(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
-			lat : $scope.dropOff.lat,
-			lng : $scope.dropOff.lng,
+			code: $scope.generateCode(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ').toString(),
+			lat : $scope.dropOff.lat.toString(),
+			lng : $scope.dropOff.lng.toString(),
 			sender: $scope.test ? $localStorage.savedToken : null
 		});
 	};
@@ -250,6 +250,7 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 				$scope.address = resp.data.results[0];
 		})
 	};
+
 	
 	$scope.enableListener = (map) => {
 		google.maps.event.addListener(map, 'click', function(event) {

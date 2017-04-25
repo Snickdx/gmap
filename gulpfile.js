@@ -8,23 +8,15 @@ var gulp = require('gulp'),
 
 gulp.task('index', function () {
 	var target = gulp.src('public/index.html');
-	// It's not necessary to read the files (will speed up things), we're only after their paths:
+	
 	var sources = gulp.src(['public/js/**/*.js', 'public/css/**/*.css'], {read: false});
 	
-	var cssFiles = gulp.src('public/**/*.styl')
-		.pipe(stylus())
-		.pipe(gulp.dest('public'));
+	gulp.src('./public/index.html')
+		.pipe(inject(gulp.src(bowerFiles(), {read: false}), {name: 'bower'}, {relative: true}))
+		.pipe(inject(gulp.src('./public/js/**/*.js', {read: false},  {relative: true})))
+		.pipe(gulp.dest('./public'));
 	
-	gulp.src('public/index.html')
-		.pipe(inject(gulp.src(bowerFiles(), {read: false}), {name: 'bower'}))
-		.pipe(inject(es.merge(
-			cssFiles,
-			gulp.src('public/js/**/*.js', {read: false})
-		)))
-		.pipe(gulp.dest('public'));
-	
-	return target.pipe(inject(sources))
-		.pipe(gulp.dest('public'));
+	return target.pipe(inject(sources)).pipe(gulp.dest('./public'));
 });
 
 gulp.task('generate-service-worker', function(callback) {
@@ -39,7 +31,7 @@ gulp.task('generate-service-worker', function(callback) {
 			stripPrefix: rootDir,
 			importScripts: [
 				'bower_components/firebase/firebase.js',
-				'js/FCMScript.js'
+				'FCMScript.js'
 			],
 		},
 		callback

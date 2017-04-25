@@ -33,12 +33,15 @@ exports.boardcastCoupon = functions.database.ref('/couponList/{pushId}')
 		
 		let androidPayload = {
 			"data":{
-				"code" : String(coupon.code),
-				"lat" : String(coupon.lat),
-				"lng" : String(coupon.lng),
-				"exp" : String(moment().add(1, 'h').format('x'))
+				"title": "Special Offer!",
+				"code" : coupon.code,
+				"lat" : coupon.lat,
+				"lng" : coupon.lng,
+				"exp" : moment().add(1, 'h').format('x').toString()
 			}
 		};
+		
+		console.log(coupon, androidPayload);
 		
 		let webPayload = {
 			"notification" : {
