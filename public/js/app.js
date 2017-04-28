@@ -167,6 +167,12 @@ app.factory('FB', ['$http', '$firebaseAuth', '$firebaseArray', '$firebaseObject'
 		});
 	};
 	
+	obj.getLastChild = (child, callback) => {
+		db.ref(child).limitToLast(1).on("child_added", function(snapshot) {
+			callback(snapshot.val());
+		});
+	};
+	
 	obj.update = function(child, obj){
 		return db.ref(child).update(obj);
 	};
@@ -205,6 +211,8 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 	
 	$scope.address = null;
 	
+	$scope.last = null;
+	
 	$scope.toggleNotification = () => {
 		if($scope.test){
 			FB.enableMessaging(token=>{
@@ -239,6 +247,11 @@ app.controller('mainCtrl', ['$scope', 'FB', 'NgMap', '$http', '$localStorage', '
 			sender: $scope.test ? $localStorage.savedToken : null
 		});
 	};
+	
+	FB.getLastChild('couponList', val => {
+		$scope.last = val;
+	});
+	
 	
 	$scope.getAddress = pos => {
 		$http({
