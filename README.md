@@ -5,7 +5,8 @@ Simple app to send notifications to subscribed clients web/android. Serverless P
 
 
 ## Architecture
-[architecture]: https://github.com/Snickdx/gmap/blob/master/architecture.png"Logo Architecture"
+![architecture](https://github.com/Snickdx/gmap/blob/master/architecture.png "Logo Title Text 1")
+
 
 ## Installation
  1. `$ bower install`
